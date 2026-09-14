@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Eye, EyeOff, Loader2, Mail, Lock, AlertCircle } from 'lucide-react';
@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { login } from '@/lib/firebase/auth';
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/';
@@ -138,5 +138,27 @@ export default function LoginPage() {
       </main>
       <Footer />
     </>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <>
+        <Header />
+        <main id="main-content" className="flex-1 pt-16 flex items-center justify-center py-12 px-4">
+          <div className="w-full max-w-md">
+            <div className="bg-white dark:bg-lexora-surface rounded-2xl border border-lexora-border p-8">
+              <div className="text-center">
+                <div className="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto" />
+              </div>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }

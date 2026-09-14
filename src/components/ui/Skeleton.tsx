@@ -67,7 +67,7 @@ export function ArticleGridSkeleton({ count = 6 }: { count?: number }) {
   return (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" role="list" aria-label="Artikel skeleton">
       {Array.from({ length: count }, (_, i) => (
-        <Skeleton key={i} variant="card" role="listitem" />
+        <Skeleton key={i} variant="card" />
       ))}
     </div>
   );
@@ -77,7 +77,7 @@ export function ArticleListSkeleton({ count = 5 }: { count?: number }) {
   return (
     <div className="space-y-4" role="list" aria-label="Daftar artikel skeleton">
       {Array.from({ length: count }, (_, i) => (
-        <Skeleton key={i} variant="article" role="listitem" />
+        <Skeleton key={i} variant="article" />
       ))}
     </div>
   );
@@ -103,9 +103,7 @@ export function HeroSkeleton() {
           <div key={i} className="flex gap-3">
             <div className={cn('animate-pulse bg-primary-500/20 rounded-full h-8 w-8 flex-shrink-0')} />
             <div className="flex-1 space-y-2">
-              {article.featuredImage && (
-                <div className={cn('animate-pulse bg-lexora-border rounded-lg h-24 w-full')} />
-              )}
+              <div className={cn('animate-pulse bg-lexora-border rounded-lg h-24 w-full')} />
               <div className={cn('animate-pulse bg-lexora-border h-5 w-3/4')} />
               <div className={cn('animate-pulse bg-lexora-border h-3 w-1/2')} />
             </div>

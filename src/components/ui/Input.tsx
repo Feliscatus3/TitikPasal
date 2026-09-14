@@ -7,6 +7,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   helperText?: string;
+  leftIcon?: React.ReactNode;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -14,11 +15,16 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const inputId = id || label?.toLowerCase().replace(/\s+/g, '-');
 
     return (
-      <div className="w-full">
+      <div className="relative">
         {label && (
           <label htmlFor={inputId} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
             {label}
           </label>
+        )}
+        {props.leftIcon && (
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+            {props.leftIcon}
+          </div>
         )}
         <input
           ref={ref}
@@ -29,6 +35,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             'disabled:opacity-50 disabled:cursor-not-allowed',
             'transition-colors',
             error && 'border-red-500 focus:ring-red-500',
+            props.leftIcon && 'pl-10',
             className
           )}
           aria-invalid={error ? 'true' : 'false'}

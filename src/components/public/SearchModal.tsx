@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Search, X, Loader2, FileText, Tag, User, Calendar } from 'lucide-react';
+import { Search, X, Loader2, FileText, Tag, User, Calendar, AlertCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 import { cn, formatRelativeTime } from '@/lib/utils';
 import type { Article } from '@/types';
 

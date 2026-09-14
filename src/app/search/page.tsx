@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Search, X, Loader2, FileText, Tag, User, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Header } from '@/components/public/Header';
@@ -19,7 +19,7 @@ interface SearchResult {
   hasMore: boolean;
 }
 
-export default function SearchPage() {
+function SearchContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const initialQuery = searchParams.get('q') || '';
@@ -106,8 +106,8 @@ export default function SearchPage() {
               <input
                 type="search"
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSearch(e.target.value)}
+                onChange={(e) => setQuery((e.target as HTMLInputElement).value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch((e.target as HTMLInputElement).value)}
                 placeholder="Cari berita, hukum, regulasi, analisis..."
                 className="w-full pl-12 pr-16 py-4 bg-white dark:bg-lexora-surface border border-lexora-border rounded-xl text-lg text-lexora-text placeholder-lexora-text-muted focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 autoFocus
@@ -226,5 +226,25 @@ export default function SearchPage() {
 
       <Footer />
     </>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={
+      <>
+        <Header />
+        <main id="main-content" className="flex-1 pt-16">
+          <header className="container-main py-12 bg-gradient-to-b from-primary-900/10 to-transparent">
+            <div className="max-w-3xl mx-auto text-center">
+              <div className="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto" />
+            </div>
+          </header>
+        </main>
+        <Footer />
+      </>
+    }>
+      <SearchContent />
+    </Suspense>
   );
 }

@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-import { Calendar, Clock, Eye, Share2, MessageSquare, ChevronLeft, ChevronRight, Facebook, Twitter, Whatsapp, Telegram, Copy, Check, Bookmark, Tag, User, ArrowLeft } from 'lucide-react';
+import { Calendar, Clock, Eye, Share2, MessageSquare, ChevronLeft, ChevronRight, Facebook, Twitter, Send, Copy, Check, Bookmark, Tag, User, ArrowLeft } from 'lucide-react';
 import { cn, formatDate, formatRelativeTime, calculateReadingTime, slugify } from '@/lib/utils';
 import type { Article, Category } from '@/types';
 import { Header } from '@/components/public/Header';
@@ -188,10 +188,10 @@ export function ArticleDetail({ article, relatedArticles, mostReadArticles, cate
                 <Twitter className="w-5 h-5" />
               </button>
               <button onClick={() => share('whatsapp')} className="p-2 rounded-lg text-lexora-text-muted hover:text-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors" aria-label="Bagikan ke WhatsApp">
-                <Whatsapp className="w-5 h-5" />
+                <MessageSquare className="w-5 h-5" />
               </button>
               <button onClick={() => share('telegram')} className="p-2 rounded-lg text-lexora-text-muted hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors" aria-label="Bagikan ke Telegram">
-                <Telegram className="w-5 h-5" />
+                <Send className="w-5 h-5" />
               </button>
               <button onClick={copyLink} className="p-2 rounded-lg text-lexora-text-muted hover:text-lexora-text hover:bg-lexora-surface transition-colors" aria-label={copied ? 'Tautin disalin' : 'Salin tautan'}>
                 {copied ? <Check className="w-5 h-5 text-green-500" /> : <Copy className="w-5 h-5" />}
@@ -250,10 +250,10 @@ export function ArticleDetail({ article, relatedArticles, mostReadArticles, cate
                   <Twitter className="w-4 h-4 mr-1" /> X
                 </button>
                 <button onClick={() => share('whatsapp')} className="btn-ghost text-sm">
-                  <Whatsapp className="w-4 h-4 mr-1" /> WhatsApp
+                  <MessageSquare className="w-4 h-4 mr-1" /> WhatsApp
                 </button>
                 <button onClick={() => share('telegram')} className="btn-ghost text-sm">
-                  <Telegram className="w-4 h-4 mr-1" /> Telegram
+                  <Send className="w-4 h-4 mr-1" /> Telegram
                 </button>
               </div>
             </footer>

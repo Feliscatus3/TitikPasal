@@ -110,7 +110,7 @@ export const articleService = {
     return fromDoc<Article>(snap.docs[0]);
   },
 
-  async getPublished(params: ArticleQueryParams = {}): Promise<SearchResult> {
+  async getPublished(params?: ArticleQueryParams): Promise<SearchResult> {
     const {
       page = 1,
       limit: limitCount = 10,
@@ -120,7 +120,7 @@ export const articleService = {
       search,
       sortBy = 'publishedAt',
       sortOrder = 'desc',
-    } = params;
+    } = params || {};
 
     const constraints: QueryConstraint[] = [
       where('status', '==', 'published'),
@@ -148,14 +148,14 @@ export const articleService = {
     };
   },
 
-  async getAll(params: ArticleQueryParams = {}): Promise<SearchResult> {
+  async getAll(params?: ArticleQueryParams): Promise<SearchResult> {
     const {
       page = 1,
       limit: limitCount = 10,
       status,
       sortBy = 'createdAt',
       sortOrder = 'desc',
-    } = params;
+    } = params || {};
 
     const constraints: QueryConstraint[] = [
       orderBy(sortBy, sortOrder),
@@ -735,3 +735,14 @@ export const dashboardService = {
     };
   },
 };
+
+// Individual function exports for backward compatibility
+export const getPublishedArticles = articleService.getPublished.bind(articleService);
+export const getPublishedArticleBySlug = articleService.getBySlug.bind(articleService);
+export const incrementArticleViews = articleService.incrementViews.bind(articleService);
+export const getCategories = categoryService.getAll.bind(categoryService);
+export const getCategoryBySlug = categoryService.getBySlug.bind(categoryService);
+export const getBreakingNews = breakingNewsService.getActive.bind(breakingNewsService);
+export const getLatestNews = latestNewsService.getActive.bind(latestNewsService);
+export const getSiteSettings = siteSettingsService.get.bind(siteSettingsService);
+export const getDashboardStats = dashboardService.getStats.bind(dashboardService);

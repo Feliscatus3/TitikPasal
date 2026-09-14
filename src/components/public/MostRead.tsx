@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { ArticleCard } from './ArticleCard';
 import { TrendingUp, Clock, Eye } from 'lucide-react';
 import { cn, formatRelativeTime } from '@/lib/utils';

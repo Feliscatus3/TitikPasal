@@ -72,17 +72,18 @@ export function EmptyState({
         <p className="text-lexora-text-muted max-w-sm mb-6">{description}</p>
       )}
       {action && (
-        <Button
-          variant={action.variant || 'primary'}
-          onClick={action.onClick}
-          asChild={!!action.href}
-        >
-          {action.href ? (
-            <a href={action.href}>{action.label}</a>
-          ) : (
-            action.label
-          )}
-        </Button>
+        action.href ? (
+          <a href={action.href} className={cn('btn-primary', action.variant === 'secondary' && 'btn-secondary', action.variant === 'outline' && 'btn-outline')}>
+            {action.label}
+          </a>
+        ) : (
+          <Button
+            variant={action.variant || 'primary'}
+            onClick={action.onClick}
+          >
+            {action.label}
+          </Button>
+        )
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { FileText, Users, Eye, TrendingUp, Plus, Clock, AlertCircle, CheckCircle, BarChart3 } from 'lucide-react';
+import { FileText, Users, Eye, TrendingUp, Plus, Clock, AlertCircle, CheckCircle, BarChart3, Folder, Image as LucideImage } from 'lucide-react';
 import { cn, formatNumber, formatRelativeTime } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
 import type { DashboardStats } from '@/types';
@@ -199,7 +199,7 @@ export function DashboardContent({ stats }: DashboardContentProps) {
             <span className="font-medium text-lexora-text">Breaking News</span>
           </Link>
           <Link href="/admin/media" className="btn-secondary h-24 flex flex-col items-center justify-center gap-2 text-center p-4">
-            <Image className="w-8 h-8 text-primary-500" />
+            <LucideImage className="w-8 h-8 text-primary-500" />
             <span className="font-medium text-lexora-text">Kelola Media</span>
           </Link>
         </div>

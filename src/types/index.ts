@@ -24,6 +24,7 @@ export interface Category {
   order: number;
   createdAt: Date;
   updatedAt: Date;
+  _count?: number;
 }
 
 export type ArticleStatus = 'draft' | 'published' | 'scheduled' | 'archived';
@@ -155,6 +156,8 @@ export interface NavigationItem {
   status: 'active' | 'inactive';
   parentId?: string;
   children?: NavigationItem[];
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface FooterConfig {
@@ -238,8 +241,8 @@ export interface SearchResult {
 }
 
 export interface PaginationParams {
-  page: number;
-  limit: number;
+  page?: number;
+  limit?: number;
 }
 
 export interface ArticleQueryParams extends PaginationParams {
