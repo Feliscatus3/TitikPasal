@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import { getDashboardStats } from '@/lib/firebase/firestore';
+import { getDashboardStatsAdmin } from '@/lib/firebase/firestore-admin';
 import { DashboardContent } from './DashboardContent';
 import { DashboardSkeleton } from './DashboardSkeleton';
 
@@ -10,7 +10,11 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage() {
-  const stats = await getDashboardStats();
+  const stats = await getDashboardStatsAdmin();
+
+  if (!stats) {
+    redirect('/admin');
+  }
 
   return <DashboardContent stats={stats} />;
 }

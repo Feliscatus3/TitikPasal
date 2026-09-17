@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { Skeleton } from '@/components/ui/Skeleton';
-import { Header } from '@/components/public/Header';
-import { Footer } from '@/components/public/Footer';
+import { Header } from "@/components/public/Header";
+import { Footer } from "@/components/public/Footer";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 export function ArticleSkeleton() {
   return (
@@ -35,7 +35,6 @@ export function ArticleSkeleton() {
             </div>
             <div className="flex items-center gap-2 mt-4">
               <Skeleton variant="text" width="60" className="mb-2" />
-              <Skeleton variant="circular" width={36} height={36} />
               <Skeleton variant="circular" width={36} height={36} />
               <Skeleton variant="circular" width={36} height={36} />
               <Skeleton variant="circular" width={36} height={36} />

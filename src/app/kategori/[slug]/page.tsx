@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getCategoryBySlug, getPublishedArticles, getCategories } from '@/lib/firebase/firestore';
+import { getPublishedArticles, getCategories, getCategoryBySlug } from '@/lib/firebase/firestore';
+import { getCategoryBySlugAdmin, getCategoriesAdmin } from '@/lib/firebase/firestore-admin';
 import { CategoryPage } from './CategoryPage';
 import { CategorySkeleton } from './CategorySkeleton';
 
@@ -11,7 +12,7 @@ interface CategoryPageProps {
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const category = await getCategoryBySlug(slug);
+  const category = await getCategoryBySlugAdmin(slug);
   
   if (!category) {
     return {
@@ -31,7 +32,8 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 }
 
 export async function generateStaticParams() {
-  const categories = await getCategories(true);
+  const categories = await getCategoriesAdmin(true);
+  if (!categories) return [];
   return categories.map((category) => ({
     slug: category.slug,
   }));
@@ -60,7 +62,7 @@ export default async function CategoryPageWrapper({ params, searchParams }: Cate
   }
 
   // Filter articles by category
-  const articles = articlesResult.articles.filter((a) => a.categoryId === category.id);
+  const articles = articlesResult.articles.filter((a: { categoryId: string }) => a.categoryId === category.id);
 
   return (
     <CategoryPage

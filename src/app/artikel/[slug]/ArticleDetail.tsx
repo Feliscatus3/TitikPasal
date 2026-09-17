@@ -1,24 +1,17 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { useState } from 'react';
-import { Calendar, Clock, Eye, Share2, MessageSquare, ChevronLeft, ChevronRight, Facebook, Twitter, Send, Copy, Check, Bookmark, Tag, User, ArrowLeft } from 'lucide-react';
-import { cn, formatDate, formatRelativeTime, calculateReadingTime, slugify } from '@/lib/utils';
-import type { Article, Category } from '@/types';
-import { Header } from '@/components/public/Header';
-import { Footer } from '@/components/public/Footer';
-import { ArticleCard } from '@/components/public/ArticleCard';
-import { CategoryNav } from '@/components/public/CategoryNav';
-import { MostRead } from '@/components/public/MostRead';
-import { Button } from '@/components/ui/Button';
-
-interface ArticleDetailProps {
-  article: Article;
-  relatedArticles: Article[];
-  mostReadArticles: Article[];
-  categories: Category[];
-}
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { Calendar, Clock, Eye, Share2, MessageSquare, ChevronLeft, ChevronRight, Facebook, Twitter, Send, Copy, Check, Bookmark, Tag, User, ArrowLeft } from "lucide-react";
+import { cn, formatDate, formatRelativeTime, calculateReadingTime, slugify } from "@/lib/utils";
+import type { Article, Category } from "@/types";
+import { Header } from "@/components/public/Header";
+import { Footer } from "@/components/public/Footer";
+import { ArticleCard } from "@/components/public/ArticleCard";
+import { CategoryNav } from "@/components/public/CategoryNav";
+import { MostRead } from "@/components/public/MostRead";
+import { Button } from "@/components/ui/Button";
 
 const shareUrls = {
   facebook: (url: string) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
@@ -27,10 +20,10 @@ const shareUrls = {
   telegram: (url: string, title: string) => `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
 };
 
-export function ArticleDetail({ article, relatedArticles, mostReadArticles, categories }: ArticleDetailProps) {
+export function ArticleDetail({ article, relatedArticles, mostReadArticles, categories }: { article: Article; relatedArticles: Article[]; mostReadArticles: Article[]; categories: Category[] }) {
   const [copied, setCopied] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
-  const articleUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const articleUrl = typeof window !== "undefined" ? window.location.href : "";
   const readingTime = article.readingTime || calculateReadingTime(article.content);
 
   const copyLink = async () => {
@@ -45,39 +38,39 @@ export function ArticleDetail({ article, relatedArticles, mostReadArticles, cate
 
   const share = (platform: keyof typeof shareUrls) => {
     const url = shareUrls[platform](articleUrl, article.title);
-    window.open(url, '_blank', 'width=600,height=400');
+    window.open(url, "_blank", "width=600,height=400");
   };
 
   const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'NewsArticle',
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
     headline: article.title,
     description: article.excerpt,
     image: article.featuredImage ? [article.featuredImage] : [],
     datePublished: article.publishedAt?.toISOString() || article.createdAt.toISOString(),
     dateModified: article.updatedAt.toISOString(),
     author: {
-      '@type': 'Person',
+      "@type": "Person",
       name: article.authorName,
       url: `${process.env.NEXT_PUBLIC_SITE_URL}/penulis/${article.authorId}`,
     },
     publisher: {
-      '@type': 'Organization',
-      name: 'LEXORA',
+      "@type": "Organization",
+      name: "LEXORA",
       logo: {
-        '@type': 'ImageObject',
+        "@type": "ImageObject",
         url: `${process.env.NEXT_PUBLIC_SITE_URL}/logo.png`,
       },
     },
     mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': articleUrl,
+      "@type": "WebPage",
+      "@id": articleUrl,
     },
   };
 
   const breadcrumbItems = [
-    { name: 'Beranda', href: '/' },
-    { name: 'Berita', href: '/berita' },
+    { name: "Beranda", href: "/" },
+    { name: "Berita", href: "/berita" },
     { name: article.categoryName, href: `/kategori/${article.categoryId}` },
     { name: article.title, href: articleUrl, current: true },
   ];
@@ -181,23 +174,23 @@ export function ArticleDetail({ article, relatedArticles, mostReadArticles, cate
 
             <div className="flex items-center gap-2 pt-4 border-t border-lexora-border" role="group" aria-label="Bagikan artikel">
               <span className="text-sm text-lexora-text-muted">Bagikan:</span>
-              <button onClick={() => share('facebook')} className="p-2 rounded-lg text-lexora-text-muted hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors" aria-label="Bagikan ke Facebook">
+              <button onClick={() => share("facebook")} className="p-2 rounded-lg text-lexora-text-muted hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors" aria-label="Bagikan ke Facebook">
                 <Facebook className="w-5 h-5" />
               </button>
-              <button onClick={() => share('twitter')} className="p-2 rounded-lg text-lexora-text-muted hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors" aria-label="Bagikan ke X">
+              <button onClick={() => share("twitter")} className="p-2 rounded-lg text-lexora-text-muted hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors" aria-label="Bagikan ke X">
                 <Twitter className="w-5 h-5" />
               </button>
-              <button onClick={() => share('whatsapp')} className="p-2 rounded-lg text-lexora-text-muted hover:text-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors" aria-label="Bagikan ke WhatsApp">
-                <MessageSquare className="w-5 h-5" />
-              </button>
-              <button onClick={() => share('telegram')} className="p-2 rounded-lg text-lexora-text-muted hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors" aria-label="Bagikan ke Telegram">
+              <button onClick={() => share("whatsapp")} className="p-2 rounded-lg text-lexora-text-muted hover:text-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors" aria-label="Bagikan ke WhatsApp">
                 <Send className="w-5 h-5" />
               </button>
-              <button onClick={copyLink} className="p-2 rounded-lg text-lexora-text-muted hover:text-lexora-text hover:bg-lexora-surface transition-colors" aria-label={copied ? 'Tautin disalin' : 'Salin tautan'}>
+              <button onClick={() => share("telegram")} className="p-2 rounded-lg text-lexora-text-muted hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors" aria-label="Bagikan ke Telegram">
+                <MessageSquare className="w-5 h-5" />
+              </button>
+              <button onClick={copyLink} className="p-2 rounded-lg text-lexora-text-muted hover:text-lexora-text hover:bg-lexora-surface transition-colors" aria-label={copied ? "Tautin disalin" : "Salin tautan"}>
                 {copied ? <Check className="w-5 h-5 text-green-500" /> : <Copy className="w-5 h-5" />}
               </button>
-              <button onClick={() => setBookmarked(!bookmarked)} className={cn('p-2 rounded-lg transition-colors', bookmarked ? 'text-yellow-500' : 'text-lexora-text-muted hover:text-lexora-text hover:bg-lexora-surface')} aria-label={bookmarked ? 'Hapus bookmark' : 'Simpan bookmark'}>
-                <Bookmark className={cn('w-5 h-5', bookmarked && 'fill-current')} />
+              <button onClick={() => setBookmarked(!bookmarked)} className={cn("p-2 rounded-lg transition-colors", bookmarked ? "text-yellow-500" : "text-lexora-text-muted hover:text-lexora-text hover:bg-lexora-surface")} aria-label={bookmarked ? "Hapus bookmark" : "Simpan bookmark"}>
+                <Bookmark className={cn("w-5 h-5", bookmarked && "fill-current")} />
               </button>
             </div>
           </header>
@@ -243,17 +236,17 @@ export function ArticleDetail({ article, relatedArticles, mostReadArticles, cate
 
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-sm font-medium text-lexora-text">Bagikan:</span>
-                <button onClick={() => share('facebook')} className="btn-ghost text-sm">
+                <button onClick={() => share("facebook")} className="btn-ghost text-sm">
                   <Facebook className="w-4 h-4 mr-1" /> Facebook
                 </button>
-                <button onClick={() => share('twitter')} className="btn-ghost text-sm">
+                <button onClick={() => share("twitter")} className="btn-ghost text-sm">
                   <Twitter className="w-4 h-4 mr-1" /> X
                 </button>
-                <button onClick={() => share('whatsapp')} className="btn-ghost text-sm">
-                  <MessageSquare className="w-4 h-4 mr-1" /> WhatsApp
+                <button onClick={() => share("whatsapp")} className="btn-ghost text-sm">
+                  <Send className="w-4 h-4 mr-1" /> WhatsApp
                 </button>
-                <button onClick={() => share('telegram')} className="btn-ghost text-sm">
-                  <Send className="w-4 h-4 mr-1" /> Telegram
+                <button onClick={() => share("telegram")} className="btn-ghost text-sm">
+                  <MessageSquare className="w-4 h-4 mr-1" /> Telegram
                 </button>
               </div>
             </footer>

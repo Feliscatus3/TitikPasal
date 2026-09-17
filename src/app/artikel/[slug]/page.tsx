@@ -1,8 +1,9 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import { getPublishedArticleBySlug, incrementArticleViews, getPublishedArticles, getCategories } from '@/lib/firebase/firestore';
-import { ArticleDetail } from './ArticleDetail';
-import { ArticleSkeleton } from './ArticleSkeleton';
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { incrementArticleViews, getPublishedArticles, getCategories, getPublishedArticleBySlug } from "@/lib/firebase/firestore";
+import { getPublishedArticleBySlugAdmin, getPublishedArticlesAdmin, getCategoriesAdmin } from "@/lib/firebase/firestore-admin";
+import { ArticleDetail } from "./ArticleDetail";
+import { ArticleSkeleton } from "./ArticleSkeleton";
 
 interface ArticlePageProps {
   params: Promise<{ slug: string }>;
@@ -10,15 +11,15 @@ interface ArticlePageProps {
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = await getPublishedArticleBySlug(slug);
+  const article = await getPublishedArticleBySlugAdmin(slug);
   
   if (!article) {
     return {
-      title: 'Artikel Tidak Ditemukan',
+      title: "Artikel Tidak Ditemukan",
     };
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
   const articleUrl = `${siteUrl}/artikel/${article.slug}`;
   const imageUrl = article.featuredImage || `${siteUrl}/og-image.png`;
 
@@ -29,11 +30,11 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       canonical: articleUrl,
     },
     openGraph: {
-      type: 'article',
+      type: "article",
       url: articleUrl,
       title: article.seoTitle || article.title,
       description: article.seoDescription || article.excerpt,
-      siteName: 'LEXORA',
+      siteName: "LEXORA",
       publishedTime: article.publishedAt?.toISOString(),
       modifiedTime: article.updatedAt.toISOString(),
       authors: [article.authorName],
@@ -49,24 +50,25 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       ],
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: article.seoTitle || article.title,
       description: article.seoDescription || article.excerpt,
       images: [imageUrl],
-      creator: '@lexora',
+      creator: "@lexora",
     },
     other: {
-      'article:published_time': article.publishedAt?.toISOString() || '',
-      'article:modified_time': article.updatedAt.toISOString(),
-      'article:author': article.authorName,
-      'article:section': article.categoryName,
-      'article:tag': article.tags.join(','),
+      "article:published_time": article.publishedAt?.toISOString() || "",
+      "article:modified_time": article.updatedAt.toISOString(),
+      "article:author": article.authorName,
+      "article:section": article.categoryName,
+      "article:tag": article.tags.join(","),
     },
   };
 }
 
 export async function generateStaticParams() {
-  const result = await getPublishedArticles({ limit: 100 });
+  const result = await getPublishedArticlesAdmin({ limit: 100 });
+  if (!result) return [];
   return result.articles.map((article) => ({
     slug: article.slug,
   }));
@@ -86,10 +88,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     getPublishedArticles({
       limit: 4,
       categoryId: article.categoryId,
-      sortBy: 'publishedAt',
-      sortOrder: 'desc',
+      sortBy: "publishedAt",
+      sortOrder: "desc",
     }),
-    getPublishedArticles({ limit: 5, sortBy: 'views', sortOrder: 'desc' }),
+    getPublishedArticles({ limit: 5, sortBy: "views", sortOrder: "desc" }),
     getCategories(true),
   ]);
 
