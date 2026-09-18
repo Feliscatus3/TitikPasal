@@ -21,6 +21,7 @@ let _firebaseStorage: FirebaseStorage | null = null;
 function initializeFirebase(): void {
   if (_firebaseApp) return;
   
+  // Check if we have valid config (not demo/placeholder)
   const hasValidConfig = firebaseConfig.apiKey && 
     firebaseConfig.projectId && 
     firebaseConfig.appId &&
@@ -51,7 +52,7 @@ if (typeof window === 'undefined') {
   initializeFirebase();
 }
 
-// Synchronous getters
+// Synchronous getters with graceful fallback
 export function getFirebaseAppSync(): FirebaseApp | null {
   if (!_firebaseApp) initializeFirebase();
   return _firebaseApp;
@@ -72,10 +73,10 @@ export function getFirebaseStorageSync(): FirebaseStorage | null {
   return _firebaseStorage;
 }
 
-// Export the actual Firebase instances directly
-export const app = getFirebaseAppSync()!;
-export const auth = getFirebaseAuthSync()!;
-export const db = getFirebaseDbSync()!;
-export const storage = getFirebaseStorageSync()!;
+// Export the actual Firebase instances directly - handle null gracefully
+export const app = getFirebaseAppSync();
+export const auth = getFirebaseAuthSync();
+export const db = getFirebaseDbSync();
+export const storage = getFirebaseStorageSync();
 
 export default app;
