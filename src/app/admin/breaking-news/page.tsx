@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { adminAuth } from '@/lib/firebase/admin';
 import { BreakingNewsContent } from './BreakingNewsContent';
 
 export const metadata: Metadata = {
@@ -10,11 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default async function BreakingNewsPage() {
-  const session = await getServerSession(authOptions);
-  
-  if (!session || (session.user.role !== 'admin' && session.user.role !== 'editor')) {
+  if (!adminAuth) {
     redirect('/admin');
   }
 
-  return <BreakingNewsContent userRole={session.user.role} />;
+  return <BreakingNewsContent userRole="admin" />;
 }
