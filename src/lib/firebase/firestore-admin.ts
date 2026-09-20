@@ -1,4 +1,4 @@
-import { adminDb, isAdminInitialized } from './admin';
+import { adminDb } from './admin';
 import type {
   Article,
   Category,
@@ -45,14 +45,14 @@ const fromDocs = <T>(docs: Array<{ exists: boolean; id: string; data: () => Reco
 
 export const articleAdminService = {
   async getBySlug(slug: string): Promise<Article | null> {
-    if (!isAdminInitialized || !adminDb) return null;
+    if (!adminDb) return null;
     const snapshot = await adminDb.collection(COLLECTIONS.ARTICLES).where('slug', '==', slug).limit(1).get();
     if (snapshot.empty) return null;
     return fromDoc<Article>(snapshot.docs[0]);
   },
 
   async getPublished(params?: ArticleQueryParams): Promise<SearchResult | null> {
-    if (!isAdminInitialized || !adminDb) return null;
+    if (!adminDb) return null;
     const {
       page = 1,
       limit: limitCount = 10,
@@ -88,7 +88,7 @@ export const articleAdminService = {
   },
 
   async getAll(params?: ArticleQueryParams): Promise<SearchResult | null> {
-    if (!isAdminInitialized || !adminDb) return null;
+    if (!adminDb) return null;
     const {
       page = 1,
       limit: limitCount = 10,
@@ -119,7 +119,7 @@ export const articleAdminService = {
   },
 
   async getByIds(ids: string[]): Promise<Article[] | null> {
-    if (!isAdminInitialized || !adminDb) return null;
+    if (!adminDb) return null;
     if (ids.length === 0) return [];
     const chunks: string[][] = [];
     for (let i = 0; i < ids.length; i += 10) {
@@ -136,7 +136,7 @@ export const articleAdminService = {
   },
 
   async getMostRead(count: number = 5): Promise<Article[] | null> {
-    if (!isAdminInitialized || !adminDb) return null;
+    if (!adminDb) return null;
     const snapshot = await adminDb.collection(COLLECTIONS.ARTICLES)
       .where('status', '==', 'published')
       .orderBy('views', 'desc')
@@ -146,7 +146,7 @@ export const articleAdminService = {
   },
 
   async getRecent(count: number = 5): Promise<Article[] | null> {
-    if (!isAdminInitialized || !adminDb) return null;
+    if (!adminDb) return null;
     const snapshot = await adminDb.collection(COLLECTIONS.ARTICLES)
       .where('status', '==', 'published')
       .orderBy('publishedAt', 'desc')
@@ -156,7 +156,7 @@ export const articleAdminService = {
   },
 
   async getByCategory(categoryId: string, count: number = 10): Promise<Article[] | null> {
-    if (!isAdminInitialized || !adminDb) return null;
+    if (!adminDb) return null;
     const snapshot = await adminDb.collection(COLLECTIONS.ARTICLES)
       .where('status', '==', 'published')
       .where('categoryId', '==', categoryId)
@@ -169,20 +169,20 @@ export const articleAdminService = {
 
 export const categoryAdminService = {
   async getById(id: string): Promise<Category | null> {
-    if (!isAdminInitialized || !adminDb) return null;
+    if (!adminDb) return null;
     const snapshot = await adminDb.collection(COLLECTIONS.CATEGORIES).doc(id).get();
     return fromDoc<Category>(snapshot);
   },
 
   async getBySlug(slug: string): Promise<Category | null> {
-    if (!isAdminInitialized || !adminDb) return null;
+    if (!adminDb) return null;
     const snapshot = await adminDb.collection(COLLECTIONS.CATEGORIES).where('slug', '==', slug).limit(1).get();
     if (snapshot.empty) return null;
     return fromDoc<Category>(snapshot.docs[0]);
   },
 
   async getAll(activeOnly = true): Promise<Category[] | null> {
-    if (!isAdminInitialized || !adminDb) return null;
+    if (!adminDb) return null;
     let queryRef = adminDb.collection(COLLECTIONS.CATEGORIES).orderBy('order', 'asc');
     if (activeOnly) queryRef = queryRef.where('isActive', '==', true);
     const snapshot = await queryRef.get();
@@ -192,7 +192,7 @@ export const categoryAdminService = {
 
 export const dashboardAdminService = {
   async getStats(): Promise<DashboardStats | null> {
-    if (!isAdminInitialized || !adminDb) return null;
+    if (!adminDb) return null;
     const [articlesSnap, usersSnap] = await Promise.all([
       adminDb.collection(COLLECTIONS.ARTICLES).get(),
       adminDb.collection(COLLECTIONS.USERS).get(),

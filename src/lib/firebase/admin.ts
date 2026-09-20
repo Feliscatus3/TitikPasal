@@ -1,28 +1,36 @@
-import { initializeApp, getApps, type App, cert } from 'firebase-admin/app';
+import { initializeApp, getApps, cert, type App } from 'firebase-admin/app';
 import { getFirestore, type Firestore } from 'firebase-admin/firestore';
+import { getAuth, type Auth } from 'firebase-admin/auth';
 
-const adminConfig = {
-  projectId: process.env.FIREBASE_ADMIN_PROJECT_ID,
-  clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
-  privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-};
+let adminApp: App | null = null;
+let adminDb: Firestore | null = null;
+let adminAuth: Auth | null = null;
 
-let adminApp: App | undefined;
-let adminDb: Firestore | undefined;
+const projectId = process.env.FIREBASE_ADMIN_PROJECT_ID || process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+const clientEmail = process.env.FIREBASE_ADMIN_CLIENT_EMAIL;
+const privateKey = process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, '\n');
 
-if (getApps().length === 0) {
-  if (!adminConfig.projectId || !adminConfig.clientEmail || !adminConfig.privateKey) {
-    console.warn('Firebase Admin credentials not fully configured. Server-side Firestore operations will use client SDK.');
-  } else {
+if (getApps().length > 0) {
+  adminApp = getApps()[0];
+} else if (projectId && clientEmail && privateKey) {
+  try {
     adminApp = initializeApp({
-      credential: cert(adminConfig),
+      credential: cert({
+        projectId,
+        clientEmail,
+        privateKey,
+      }),
     });
-    adminDb = getFirestore(adminApp);
+  } catch (error) {
+    console.error('Failed to initialize Firebase Admin SDK:', error);
   }
 } else {
-  adminApp = getApps()[0] as App;
-  adminDb = getFirestore(adminApp);
+  console.warn('Firebase Admin credentials missing. Server-side admin operations will be disabled.');
 }
 
-export { adminApp, adminDb };
-export const isAdminInitialized = !!adminDb;
+if (adminApp) {
+  adminDb = getFirestore(adminApp);
+  adminAuth = getAuth(adminApp);
+}
+
+export { adminApp, adminDb, adminAuth };
