@@ -52,7 +52,51 @@ if (typeof window === 'undefined') {
   initializeFirebase();
 }
 
-// Synchronous getters with graceful fallback
+// Synchronous getters with graceful fallback - throw if not initialized
+function getFirebaseApp(): FirebaseApp {
+  if (!_firebaseApp) initializeFirebase();
+  if (!_firebaseApp) {
+    throw new Error('Firebase App not initialized. Check your environment variables.');
+  }
+  return _firebaseApp;
+}
+
+function getFirebaseAuth(): Auth {
+  if (!_firebaseAuth) {
+    if (!_firebaseApp) initializeFirebase();
+    if (!_firebaseApp) throw new Error('Firebase App not initialized');
+    _firebaseAuth = fbGetAuth(_firebaseApp);
+  }
+  return _firebaseAuth;
+}
+
+function getFirebaseDb(): Firestore {
+  if (!_firebaseDb) {
+    if (!_firebaseApp) initializeFirebase();
+    if (!_firebaseApp) throw new Error('Firebase App not initialized');
+    _firebaseDb = getFirestore(_firebaseApp);
+  }
+  return _firebaseDb;
+}
+
+function getFirebaseStorage(): FirebaseStorage {
+  if (!_firebaseStorage) {
+    if (!_firebaseApp) initializeFirebase();
+    if (!_firebaseApp) throw new Error('Firebase App not initialized');
+    _firebaseStorage = fbGetStorage(_firebaseApp);
+  }
+  return _firebaseStorage;
+}
+
+// Export the actual Firebase instances directly - these will throw if not initialized
+export const app = getFirebaseApp();
+export const auth = getFirebaseAuth();
+export const db = getFirebaseDb();
+export const storage = getFirebaseStorage();
+
+export default app;
+
+// Synchronous getters for backward compatibility - return nullable
 export function getFirebaseAppSync(): FirebaseApp | null {
   if (!_firebaseApp) initializeFirebase();
   return _firebaseApp;
@@ -72,11 +116,3 @@ export function getFirebaseStorageSync(): FirebaseStorage | null {
   if (!_firebaseStorage) initializeFirebase();
   return _firebaseStorage;
 }
-
-// Export the actual Firebase instances directly - handle null gracefully
-export const app = getFirebaseAppSync();
-export const auth = getFirebaseAuthSync();
-export const db = getFirebaseDbSync();
-export const storage = getFirebaseStorageSync();
-
-export default app;
