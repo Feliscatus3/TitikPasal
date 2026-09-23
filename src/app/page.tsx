@@ -309,7 +309,7 @@ export default function Home() {
                   data pribadi mereka.
                 </p>
                 <a
-                  href "/artikel/panduan-uu-pdp"
+                  href="/artikel/panduan-uu-pdp"
                   className="mt-4 inline-block text-[var(--accent-cyan)] font-medium hover:underline flex items-center gap-2"
                 >
                   Baca Selengkapnya
@@ -337,7 +337,7 @@ export default function Home() {
                   kita serta kewajiban kita sebagai warga negara untuk menjaga kebersamaan dalam komunitas.
                 </p>
                 <a
-                  href "/artikel/hak-asasi-manusia"
+                  href="/artikel/hak-asasi-manusia"
                   className="mt-4 inline-block text-[var(--accent-cyan)] font-medium hover:underline flex items-center gap-2"
                 >
                   Baca Selengkapnya
