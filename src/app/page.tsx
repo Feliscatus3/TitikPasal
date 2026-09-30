@@ -203,12 +203,12 @@ export default function Home() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    "/news/politics"
-                    className="hover:text-[var(--bbc-red)] transition-colors text-[var(--muted)]"
+                  <Link
+                    href="/news/politics"
+                    className="hover:text-[var(--bbc-red)] transition-colors text-[var(--...]"
                   >
                     Politics
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <a
