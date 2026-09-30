@@ -4,35 +4,37 @@
 
 @layer base {
   :root {
-    --background: #0D0D0E;
-    --foreground: #F9FAFB;
-    --card: #18181B;
-    --card-foreground: #F9FAFB;
-    --muted: #9CA3AF;
-    --accent-purple: #7C3AED;
-    --accent-purple-hover: #8B5CF6;
-    --accent-cyan: #06B6D4;
-    --border: #303030;
-    --sidebar: #121214;
+    --bbc-red: #BB1919;
+    --bbc-charcoal: #141414;
+    --bbc-slate: #2D2D2D;
+    --bbc-light: #F5F5F0;
+    --background: var(--bbc-charcoal);
+    --foreground: #FFFFFF;
+    --card: var(--bbc-slate);
+    --card-foreground: #FFFFFF;
+    --muted: #AAAAAA;
+    --accent-red: var(--bbc-red);
+    --accent-red-hover: #A01616;
+    --border: #3A3A3C;
+    --sidebar: var(--bbc-slate);
   }
 
-  @media (prefers-color-scheme: dark) {
+  @media (prefers-color-scheme: light) {
     :root {
-      --background: #0D0D0E;
-      --foreground: #F9FAFB;
-      --card: #18181B;
-      --card-foreground: #F9FAFB;
-      --muted: #9CA3AF;
-      --accent-purple: #7C3AED;
-      --accent-purple-hover: #8B5CF6;
-      --accent-cyan: #06B6D4;
-      --border: #303030;
-      --sidebar: #121214;
+      --background: #FFFFFF;
+      --foreground: var(--bbc-charcoal);
+      --card: #FFFFFF;
+      --card-foreground: var(--bbc-charcoal);
+      --muted: #777777;
+      --accent-red: #BB1919;
+      --accent-red-hover: #A01616;
+      --border: #E5E5E5;
+      --sidebar: #F5F5F5;
     }
   }
 
   body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     background-color: var(--background);
     color: var(--foreground);
     -webkit-font-smoothing: antialiased;
@@ -45,13 +47,13 @@
   }
 
   a {
-    color: var(--accent-cyan);
+    color: var(--accent-red);
     text-decoration: none;
     transition: color 0.2s ease;
   }
 
   a:hover {
-    color: var(--accent-purple-hover);
+    color: var(--accent-red-hover);
   }
 
   /* Custom scrollbar */
@@ -70,6 +72,11 @@
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--accent-purple);
+    background: var(--accent-red);
+  }
+
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.2; }
   }
 }
