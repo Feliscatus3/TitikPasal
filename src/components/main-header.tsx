@@ -47,7 +47,7 @@ export function MainHeader({ setDarkMode }: MainHeaderProps) {
           <nav className="hidden md:flex items-center gap-8">
             {tabs.map((tab) => (
               <button
-                key{tab.key}
+                key={tab.key}
                 onClick={() => router.push(`?tab=${tab.key}`)}
                 className={`px-3 py-2 rounded text-sm font-medium ${
                   currentTab === tab.key
