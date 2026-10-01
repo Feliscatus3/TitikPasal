@@ -212,7 +212,7 @@ export default function Home() {
                 </li>
                 <li>
                   <a
-                    "/news/business"
+                    href="/news/business"
                     className="hover:text-[var(--bbc-red)] transition-colors text-[var(--muted)]"
                   >
                     Business
